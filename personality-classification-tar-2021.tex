@@ -14,12 +14,12 @@
 
 \title{Syntax vs Semantics: What tells more about your personality?}
 
-\name{Marko Lazarić, Laura Torić, Roman Yatuskha}
+\name{Marko Lazarić, Laura Torić, Roman Yatsukha}
 
 \address{
 University of Zagreb, Faculty of Electrical Engineering and Computing\\
 Unska 3, 10000 Zagreb, Croatia\\
-\texttt{\{marko.lazaric,laura.toric,roman.yatuskha\}@fer.hr}\\
+\texttt{\{marko.lazaric,laura.toric,roman.yatsukha\}@fer.hr}\\
 }
 
 \abstract{
@@ -48,6 +48,14 @@ POS, NE, embeddings, bag of words
 
 \section{Models}
 SVM, decision trees, BERT, XLNet
+
+\subsection{BERT}
+
+Bidirectional Encoder Representations from Transformers, or just BERT, is a transformer based model for NLP tasks first presented in [[INSERT BERT CITATION HERE]]. BERT comes pretrained on two large corpora: BooksCorpus which consists of 800 million words, and the English Wikipedia with 2.5 billion words. The pretraining is done on two NLP taks: masked language modeling, where the model predicts a masked word in a sentence, and next sentence prediction. [[BERT CITATION]]
+
+BERT requires fine tuning before it is ready for usage on other NLP tasks. For our use case we picked a promising personality trait [[NEED FURTHER EXPLANATION]], and fine-tuned a BERT\textsubscript{BASE}, cased variant of BERT which has 110 million parameters and is trained on cased dataset as opposed to uncased.
+
+[[RESULTS HERE: TODO RUN BERT AGAIN >.>]]
 
 \section{Experiments}
 1.\ best model and features for each personality
