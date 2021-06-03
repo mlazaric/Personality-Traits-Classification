@@ -46,6 +46,8 @@ Something about the papers that we had to read for first chekpoint
 About dataset
 POS, NE, embeddings, bag of words
 
+The dataset used for this paper is from [[PENNEBAKER CITATION]]'s collection of summer school student essays. The students' personality traits were assessed using the BFI self-report questionaire [[BFI CITATION?]].
+
 \section{Models}
 SVM, decision trees, BERT, XLNet
 
@@ -53,7 +55,9 @@ SVM, decision trees, BERT, XLNet
 
 Bidirectional Encoder Representations from Transformers, or just BERT, is a transformer based model for NLP tasks first presented in [[INSERT BERT CITATION HERE]]. BERT comes pretrained on two large corpora: BooksCorpus which consists of 800 million words, and the English Wikipedia with 2.5 billion words. The pretraining is done on two NLP taks: masked language modeling, where the model predicts a masked word in a sentence, and next sentence prediction. [[BERT CITATION]]
 
-BERT requires fine tuning before it is ready for usage on other NLP tasks. For our use case we picked a promising personality trait [[NEED FURTHER EXPLANATION]], and fine-tuned a BERT\textsubscript{BASE}, cased variant of BERT which has 110 million parameters and is trained on cased dataset as opposed to uncased.
+BERT requires fine tuning before it is ready for usage on other NLP tasks. For our use case we picked a promising personality trait [[NEED FURTHER EXPLANATION]], and fine-tuned a BERT\textsubscript{BASE}$-$cased variant of BERT which was pretrained on cased input, ie. "Mark" and "mark" are different tokens. The model has 110 million parameters to fine tune.
+
+[[MORE ON DATASET?]] To transform essays into the desired input representation we used BertTokenizer from the HunggingFace library [[HUGGINGFAVCE CITATION]]. The tokenizer takes raw text and limits the input to 512 tokens so any essays longer than that are trimmed. The dataset was split into training and testing sets using 80:20, using shuffled batches of size 10 (batch size was limited due to the available GPU memory). Adam was used as the optimizer [[ADAM CITATION]] with a learning rate of $10^{-5}$ and no regularization.
 
 [[RESULTS HERE: TODO RUN BERT AGAIN >.>]]
 
