@@ -11,6 +11,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{float}
 
 \title{Syntax vs Semantics: What tells more about your personality?}
 
@@ -43,10 +44,27 @@ Overview
 Something about the papers that we had to read for first chekpoint
 
 \section{Features}
-About dataset
-POS, NE, embeddings, bag of words
+%About dataset
+%POS, NE, embeddings, bag of words
 
-The dataset used for this paper is from [[PENNEBAKER CITATION]]'s \cite{pennebaker} collection of summer school student essays. The students' personality traits were assessed using the BFI self-report questionaire [[BFI CITATION?]].
+The dataset used for this paper is from \cite{pennebaker}, a collection of summer school student essays.
+The students' personality traits were assessed using the big five inventory (BFI) self-report questionaire.
+The big five personality traits that were assessed are: extraversion, agreeableness, openness, conscientiousness and neuroticism.
+The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
+
+\begin{table}[H]
+	\begin{tabular}{lrr}
+		\hline
+		Personality trait & Negative & Positive \\ \hline
+		Extraversion                                  & 1191 (48.28\%)                         & 1276 (51.72\%)                         \\
+		Neuroticism                                  & 1234 (50.02\%)                         & 1233 (49.98\%)                         \\
+		Agreeableness                                  & 1157 (46.90\%)                         & 1310 (53.10\%)                         \\
+		Conscientiousness                                  & 1214 (49.21\%)                         & 1253 (50.79\%)                         \\
+		Openness                                  & 1196 (48.48\%)                         & 1271 (51.52\%)                         \\ \hline
+	\end{tabular}
+	\caption{The number of positive and negative examples for each personality trait.}
+	\label{positive negative examples}
+\end{table}
 
 SpaCy\footnote{https://spacy.io} was used for lemmatization, part-of-speech tagging and named entity recognition.
 The features extracted from the essays were bag of word features and the number of each part-of-speech and named entity tag in the essay.
