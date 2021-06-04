@@ -46,7 +46,11 @@ Something about the papers that we had to read for first chekpoint
 About dataset
 POS, NE, embeddings, bag of words
 
-The dataset used for this paper is from [[PENNEBAKER CITATION]]'s collection of summer school student essays. The students' personality traits were assessed using the BFI self-report questionaire [[BFI CITATION?]].
+The dataset used for this paper is from [[PENNEBAKER CITATION]]'s \cite{pennebaker} collection of summer school student essays. The students' personality traits were assessed using the BFI self-report questionaire [[BFI CITATION?]].
+
+SpaCy\footnote{https://spacy.io} was used for lemmatization, part-of-speech tagging and named entity recognition.
+The features extracted from the essays were bag of word features and the number of each part-of-speech and named entity tag in the essay.
+To reduce the effect of the length of the essay on the features, alternative features were tried where each number was normalized by the sum of the part-of-speech or named entity tags to get the percentage of each tag or normalized by the number of sentences to get the mean number of each part-of-speech or named entity tag per sentence.
 
 \section{Models}
 SVM, decision trees, BERT, XLNet
