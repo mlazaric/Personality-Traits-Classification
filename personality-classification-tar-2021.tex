@@ -93,13 +93,18 @@ After that, the selected features were standardized by removing the mean and sca
 
 \subsection{BERT}
 
-Bidirectional Encoder Representations from Transformers, or just BERT, is a transformer based model for NLP tasks first presented in [[INSERT BERT CITATION HERE]]. BERT comes pretrained on two large corpora: BooksCorpus which consists of 800 million words, and the English Wikipedia with 2.5 billion words. The pretraining is done on two NLP taks: masked language modeling, where the model predicts a masked word in a sentence, and next sentence prediction. [[BERT CITATION]]
+Bidirectional Encoder Representations from Transformers, or just BERT, is a transformer based model for NLP tasks first presented in [[INSERT BERT CITATION HERE]]. 
+BERT comes pretrained on two large corpora: BooksCorpus which consists of 800 million words, and the English Wikipedia with 2.5 billion words. 
+The pretraining is done on two NLP taks: masked language modeling, where the model predicts a masked word in a sentence, and next sentence prediction. [[BERT CITATION]]
 
-BERT requires fine tuning before it is ready for usage on other NLP tasks. For our use case we picked a promising personality trait [[NEED FURTHER EXPLANATION]], and fine-tuned a BERT\textsubscript{BASE}$-$cased variant of BERT which was pretrained on cased input, ie. "Mark" and "mark" are different tokens. The model has 110 million parameters to fine tune.
+BERT requires fine tuning before it is ready for usage on other NLP tasks. 
+Due to our hardware limitations, we picked a single personality trait, openness, and fine-tuned a BERT\textsubscript{BASE}$-$cased variant of BERT which was pretrained on cased input, ie. "Mark" and "mark" are different tokens. 
+The model requires fine tuning of 110 million parameters.
 
-[[MORE ON DATASET?]] To transform essays into the desired input representation we used BertTokenizer from the HunggingFace library [[HUGGINGFAVCE CITATION]]. The tokenizer takes raw text and limits the input to 512 tokens so any essays longer than that are trimmed. The dataset was split into training and testing sets using 80:20, using shuffled batches of size 10 (batch size was limited due to the available GPU memory). Adam was used as the optimizer [[ADAM CITATION]] with a learning rate of $10^{-5}$ and no regularization.
-
-[[RESULTS HERE: TODO RUN BERT AGAIN >.>]]
+To transform essays into the desired input representation we used BertTokenizer from the HunggingFace library [[HUGGINGFAVCE CITATION]]. 
+The tokenizer takes raw text and limits the input to 512 tokens so any essays longer than that are trimmed. 
+The dataset was split into training, validation, and testing sets with a 60/20/20 ratio, using batches of size 10 (batch size was limited due to the available GPU memory). 
+The batches were shuffled for the training set. We used Adam as the optimizer [[ADAM CITATION]] with a learning rate of $10^{-5}$ and no weight decay.
 
 \section{Experiments}
 To test our syntax and semantic models we conducted three experiments described in this section.
@@ -117,6 +122,27 @@ Using only those features we tested to see if there is any difference in a model
 
 \section{Results}
 Tables and graphs (and wordclouds)
+
+\subsection{BERT}
+
+Even though the model's loss was steadily decreasing through the epochs, the validation loss was irregular. 
+We experimented with different training/validation/testing set ratios, and weight decay, however, the increasing trend of validation loss persisted. 
+
+\begin{table}[H]
+	\begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    Epoch & 1 & 2 & 3 & 4 & 5\\
+		\hline
+		Training loss & 0.69 & 0.66 & 0.62 & 0.51 & 0.36\\ 
+    \hline
+		Validation loss & 0.67 & 0.68 & 0.68 & 0.79 & 0.88\\ 
+    \hline
+	\end{tabular}
+	\caption{Training and validation losses during the epochs.}
+	\label{losses}
+\end{table}
+
+This does not inspire confidence into model's generalization ability.
 
 \section{Conclusion}
 Well this was fun.
