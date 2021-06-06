@@ -141,6 +141,18 @@ The tokenizer takes raw text and limits the input to 512 tokens so any essays lo
 The dataset was split into training, validation, and testing sets with a 60/20/20 ratio, using batches of size 10 (batch size was limited due to the available GPU memory). 
 The batches were shuffled for the training set. We used Adam as the optimizer [[ADAM CITATION]] with a learning rate of $10^{-5}$ and no weight decay.
 
+\subsection{XLNet}
+
+XLNet is an auto-regressive language model.
+It uses transformers with recurrence to output the joint probability of a sequence of tokens.
+To calculate the probability, it uses all permutations of word tokens in a sentence, instead of just those to the left or right of the target token.
+More info can be found in \citep{DBLP:journals/corr/abs-1906-08237}.
+
+In this paper we used pretrained XLNet for sequence classification with the XLNet tokenizer.
+The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed.
+The network was trained for 5 epochs with the batch size of 5.
+Adam with the learning rate of $10^{-5}$ and $10^{-2}$ regularization was used to update the parameters.
+
 \section{Experiments}
 To test our syntax and semantic models we conducted three experiments described in this section.
 
