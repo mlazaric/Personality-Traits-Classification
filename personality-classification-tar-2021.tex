@@ -48,7 +48,7 @@ Something about the papers that we had to read for first chekpoint
 %POS, NE, embeddings, bag of words
 
 The dataset used for this paper is from \cite{pennebaker}, a collection of student essays.
-The students' personality traits were assessed using the big five inventory (BFI) self-report questionaire.
+The students' personality traits were assessed using the big five inventory (BFI) self-report questionnaire.
 The big five personality traits that were assessed are: extraversion, agreeableness, openness, conscientiousness and neuroticism.
 The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
 
@@ -75,7 +75,17 @@ To reduce the effect of the length of the essay on the features, alternative fea
 For the semantic models we used word embeddings.
 
 \section{Models}
-SVM, decision trees, BERT, XLNet
+%SVM, decision trees, BERT, XLNet
+
+Since the different personality traits are independent, a separate model was trained to classify each personality trait.
+To test the predictive power of syntactic features, SVMs were used, while BERT and XLNet were used as representative semantic models.
+The individual models and their pipelines are further explained in the following subsections.
+
+\subsection{SVM}
+
+Support Vector Machines from scikit-learn\footnote{https://scikit-learn.org/} were trained to classify the essays for each personality trait.
+Feature selection was done by selecting a certain number of features with the highest ANOVA F-value.
+After that, the selected features were standardized by removing the mean and scaling to unit variance and used to train the SVMs.
 
 \subsection{BERT}
 
