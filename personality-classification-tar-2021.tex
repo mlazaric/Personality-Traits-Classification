@@ -47,7 +47,7 @@ It uses the following five personality traits: extraversion, agreeableness, open
 
 In this paper, we experiment with two approaches to classifying the different personality traits: syntactic and semantic.
 The syntactic approach uses the role of the words in the sentence such as subject, object, etc. without knowing what the words mean.
-The semantic approach uses the meanings of the words, either through learned embeddings or the bag of words model.
+The semantic approach uses the meanings of the words, either through pretrained embeddings or the bag of words model.
 Our results show that different approaches work better for different personality traits.
 %Motivation (What we write tells alot about who we are.. bla bla ... how far can we go...)
 %Big Five
@@ -60,16 +60,16 @@ Our results show that different approaches work better for different personality
 \section{Previous work}
 Something about the papers that we had to read for first chekpoint
 
-\section{Features}
+\section{Dataset}
 %About dataset
 %POS, NE, embeddings, bag of words
 
 The dataset used for this paper is from \cite{pennebaker}, a collection of student essays.
 The students' personality traits were assessed using the big five inventory (BFI) self-report questionnaire.
-The big five personality traits that were assessed are: extraversion, agreeableness, openness, conscientiousness and neuroticism.
 The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
 
 \begin{table}[H]
+	\centering
 	\begin{tabular}{lrr}
 		\hline
 		Personality trait & Negative & Positive \\ \hline
@@ -85,9 +85,31 @@ The dataset contains 2467  essays with a mostly balanced number of positive and 
 
 Our goal is to correctly classify all of the big five personality traits based on the given essay.
 
+\section{Features}
+
 The features extracted from the essays were bag-of-words features and the number of each part-of-speech and named entity tag in the essay.
 SpaCy\footnote{https://spacy.io} was used for lemmatization, part-of-speech tagging and named entity recognition.
+
 To reduce the effect of the length of the essay on the features, alternative features were tried where each number was normalized by the sum of the part-of-speech or named entity tags to get the percentage of each tag or normalized by the number of sentences to get the mean number of each part-of-speech or named entity tag per sentence.
+
+The previously explained features are shown in table \ref{example features} for the sentence "Well, right now I just woke up from a mid-day nap in Texas."
+SpaCy's abbreviations for individual tags are used to preserve space.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{llllll}
+		\hline
+		\multicolumn{4}{l}{Part-of-speech tags} & \multicolumn{2}{l}{Named entity tags} \\ \hline
+		RB        & 3       & VBD      & 1      & DATE                & 1               \\
+		NN        & 3       & RP       & 1      & GPE                 & 1               \\ \cline{5-6} 
+		IN        & 2       & DT       & 1      &                     &                 \\
+		UH        & 1       & JJ       & 1      &                     &                 \\
+		,         & 1       & NNP      & 1      &                     &                 \\
+		PRP       & 1       & .        & 1      &                     &                 \\ \cline{1-4}
+	\end{tabular}
+	\caption{Number of each part-of-speech and named entity tag detected by spaCy in the example sentence.}
+	\label{example features}
+\end{table}
 
 For the semantic models we used word embeddings.
 
