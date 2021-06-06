@@ -133,10 +133,9 @@ After that, the selected features were standardized by removing the mean and sca
 
 \subsection{XLNet}
 
-XLNet is an auto-regressive language model.
+XLNet is an auto-regressive language model introduced in \citep{DBLP:journals/corr/abs-1906-08237}.
 It uses transformers with recurrence to output the joint probability of a sequence of tokens.
 To calculate the probability, it uses all permutations of word tokens in a sentence, instead of just those to the left or right of the target token.
-More info can be found in \citep{DBLP:journals/corr/abs-1906-08237}.
 
 In this paper we used pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
 The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed.
