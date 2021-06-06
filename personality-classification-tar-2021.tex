@@ -28,7 +28,7 @@ Unska 3, 10000 Zagreb, Croatia\\
 	On the other hand, natural language processing has made great progress in similarly subjective areas such as sentiment analysis.
 	In this paper, we compare two approaches to classifying individual personality traits based on essays: synctactic and semantic.
 	The syntactic approach uses the role of the word in the sentence, such as subject, object, verb, etc., while the semantic approach uses the meaning of the words themselves to classify the essays.
-	We compare the two approaches on a dataset of 2467 student essays annotated with the big five personality traits and show that different approaches are better suited for different personality traits.
+	We compare the two approaches on a dataset of 2467 student essays annotated with the big five personality traits and show that the semantic approach tends to perform better across the board.
 }
 
 \begin{document}
@@ -48,7 +48,7 @@ It uses the following five personality traits: extraversion, agreeableness, open
 In this paper, we experiment with two approaches to classifying the different personality traits: syntactic and semantic.
 The syntactic approach uses the role of the words in the sentence such as subject, object, etc. without knowing what the words mean.
 The semantic approach uses the meanings of the words, either through pretrained embeddings or the bag of words model.
-Our results show that different approaches work better for different personality traits.
+Our results show that semantic models tend to perform better than syntactic models for all personality traits.
 %Motivation (What we write tells alot about who we are.. bla bla ... how far can we go...)
 %Big Five
 %Previous work (only uses sentiment)
@@ -63,7 +63,7 @@ Our results show that different approaches work better for different personality
 They used both boolean encodings and relative frequencies of words and phrases, as well as topic extraction, as their features, which were then reduced using univariate feature selection, and randomized principal component analysis.
 Although we use different features for our predictions, we mirror the idea of using separate models for each personality trait rather than predicting them with a single model.
 
-In contrast, \cite{pizzolli} used a single model on \cite{pennebaker} dataset with subpar results, although they used the essay dataset only for the purpose of having a baseline, before moving on to predict traits of various characters in William Shakespeare's Hamlet.
+In contrast, \cite{pizzolli-strapparava-2019-personality} used a single model on \cite{pennebaker} dataset with subpar results, although they used the essay dataset only for the purpose of having a baseline, before moving on to predict traits of various characters in William Shakespeare's Hamlet.
 
 \section{Dataset}
 %About dataset
@@ -130,6 +130,18 @@ The individual models and their pipelines are further explained in the following
 Support Vector Machines from scikit-learn\footnote{https://scikit-learn.org/} were trained to classify the essays for each personality trait.
 Feature selection was done by selecting a certain number of features with the highest ANOVA F-value.
 After that, the selected features were standardized by removing the mean and scaling to unit variance and used to train the SVMs.
+
+\subsection{XLNet}
+
+XLNet is an auto-regressive language model.
+It uses transformers with recurrence to output the joint probability of a sequence of tokens.
+To calculate the probability, it uses all permutations of word tokens in a sentence, instead of just those to the left or right of the target token.
+More info can be found in \citep{DBLP:journals/corr/abs-1906-08237}.
+
+In this paper we used pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
+The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed.
+The network was trained for 5 epochs with the batch size of 5.
+Adam with the learning rate of $10^{-5}$ and $10^{-2}$ regularization was used to update the parameters.
 
 \section{Experiments}
 To test our syntax and semantic models we conducted three experiments described in this section.
@@ -269,7 +281,10 @@ Other than being amusing, the figures are quite different from each other which 
 \end{figure}
 
 \section{Conclusion}
-Well this was fun.
+In this paper, we compared only syntax and only semantic models to see if one has an edge over the other.
+While there is certainly some information hiding in the syntax, semantics still seem to be the dominating factor.
+By looking at the most important features for each personality, we can clearly see the differences between them, and some and not that surprising.
+This promises a bright future for personality trait classification, and it seems that both syntax and semantics will be needed to create a powerful model.
 
 \bibliographystyle{tar2021}
 \bibliography{tar2021}
