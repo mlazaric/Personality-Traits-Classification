@@ -47,7 +47,7 @@ Something about the papers that we had to read for first chekpoint
 %About dataset
 %POS, NE, embeddings, bag of words
 
-The dataset used for this paper is from \cite{pennebaker}, a collection of summer school student essays.
+The dataset used for this paper is from \cite{pennebaker}, a collection of student essays.
 The students' personality traits were assessed using the big five inventory (BFI) self-report questionaire.
 The big five personality traits that were assessed are: extraversion, agreeableness, openness, conscientiousness and neuroticism.
 The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
@@ -66,9 +66,13 @@ The dataset contains 2467  essays with a mostly balanced number of positive and 
 	\label{positive negative examples}
 \end{table}
 
+Our goal is to correctly classify all of the big five personality traits based on the given essay.
+
+The features extracted from the essays were bag-of-words features and the number of each part-of-speech and named entity tag in the essay.
 SpaCy\footnote{https://spacy.io} was used for lemmatization, part-of-speech tagging and named entity recognition.
-The features extracted from the essays were bag of word features and the number of each part-of-speech and named entity tag in the essay.
 To reduce the effect of the length of the essay on the features, alternative features were tried where each number was normalized by the sum of the part-of-speech or named entity tags to get the percentage of each tag or normalized by the number of sentences to get the mean number of each part-of-speech or named entity tag per sentence.
+
+For the semantic models we used word embeddings.
 
 \section{Models}
 SVM, decision trees, BERT, XLNet
@@ -84,9 +88,18 @@ BERT requires fine tuning before it is ready for usage on other NLP tasks. For o
 [[RESULTS HERE: TODO RUN BERT AGAIN >.>]]
 
 \section{Experiments}
-1.\ best model and features for each personality
-2.\ ttest for different pos and ne between different personalities
-3.\ most significant words/pos tags/named entities for each personality
+To test our syntax and semantic models we conducted three experiments described in this section.
+
+\textbf{Experiment 1.} To test the performance of different models and features we decided to compare F1 and accuracy scores measured on the test set.
+For the syntax models we used SVM with all possible combinations of part-of-speech and named entity tags and tested all of them.
+For the semantic models we used BERT, XLNet and SVM with bag-of-words features.
+
+\textbf{Experiment 2.}  In order to test if some personality traits had different distributions of part-of-speech or named entity tags than others, we used a t-test, or more accurately, Welch’s t-test.
+For a few selected most promising tags we tested the difference between every pair of traits and reported p values.
+If the p value was less than 0.05 the difference was considered significant.
+
+\textbf{Experiment 3.} For our last experiment we wanted to find the most descriptive features for each trait using a univariate f test.
+Using only those features we tested to see if there is any difference in a model's performance.
 
 \section{Results}
 Tables and graphs (and wordclouds)
