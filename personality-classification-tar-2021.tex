@@ -28,7 +28,7 @@ Unska 3, 10000 Zagreb, Croatia\\
 	On the other hand, natural language processing has made great progress in similarly subjective areas such as sentiment analysis.
 	In this paper, we compare two approaches to classifying individual personality traits based on essays: synctactic and semantic.
 	The syntactic approach uses the role of the word in the sentence, such as subject, object, verb, etc., while the semantic approach uses the meaning of the words themselves to classify the essays.
-	We compare the two approaches on a dataset of 2467 student essays annotated with the big five personality traits and show that different approaches work better for different personality traits.
+	We compare the two approaches on a dataset of 2467 student essays annotated with the big five personality traits and show that different approaches are better suited for different personality traits.
 }
 
 \begin{document}
@@ -36,27 +36,40 @@ Unska 3, 10000 Zagreb, Croatia\\
 \maketitleabstract
 
 \section{Introduction}
-Motivation (What we write tells alot about who we are.. bla bla ... how far can we go...)
-Big Five
-Previous work (only uses sentiment)
-But (what about the syntax?)
-We (will see what is more important syntax or semantics..)
-Results are showing..
-Overview
+
+Every text contains a remarkable amount of information about the author.
+While that information might not be apparent to people, natural language processing has shown itself very adept to using that information to classify texts and their authors' into certain categories.
+
+An example of such a task is classifying the personality of the author based on their essay.
+Since a personality is hard to define, it is usually decomposed into several personality traits which are usually binary.
+The big five personality model is a popular personality trait model which will be used in this paper.
+It uses the following five personality traits: extraversion, agreeableness, openness, conscientiousness and neuroticism.
+
+In this paper, we experiment with two approaches to classifying the different personality traits: syntactic and semantic.
+The syntactic approach uses the role of the words in the sentence such as subject, object, etc. without knowing what the words mean.
+The semantic approach uses the meanings of the words, either through pretrained embeddings or the bag of words model.
+Our results show that different approaches work better for different personality traits.
+%Motivation (What we write tells alot about who we are.. bla bla ... how far can we go...)
+%Big Five
+%Previous work (only uses sentiment)
+%But (what about the syntax?)
+%We (will see what is more important syntax or semantics..)
+%Results are showing..
+%Overview
 
 \section{Previous work}
 Something about the papers that we had to read for first chekpoint
 
-\section{Features}
+\section{Dataset}
 %About dataset
 %POS, NE, embeddings, bag of words
 
 The dataset used for this paper is from \cite{pennebaker}, a collection of student essays.
 The students' personality traits were assessed using the big five inventory (BFI) self-report questionnaire.
-The big five personality traits that were assessed are: extraversion, agreeableness, openness, conscientiousness and neuroticism.
 The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
 
 \begin{table}[H]
+	\centering
 	\begin{tabular}{lrr}
 		\hline
 		Personality trait & Negative & Positive \\ \hline
@@ -72,9 +85,31 @@ The dataset contains 2467  essays with a mostly balanced number of positive and 
 
 Our goal is to correctly classify all of the big five personality traits based on the given essay.
 
+\section{Features}
+
 The features extracted from the essays were bag-of-words features and the number of each part-of-speech and named entity tag in the essay.
 SpaCy\footnote{https://spacy.io} was used for lemmatization, part-of-speech tagging and named entity recognition.
+
 To reduce the effect of the length of the essay on the features, alternative features were tried where each number was normalized by the sum of the part-of-speech or named entity tags to get the percentage of each tag or normalized by the number of sentences to get the mean number of each part-of-speech or named entity tag per sentence.
+
+The previously explained features are shown in table \ref{example features} for the sentence "Well, right now I just woke up from a mid-day nap in Texas."
+SpaCy's abbreviations for individual tags are used to preserve space.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{llllll}
+		\hline
+		\multicolumn{4}{l}{Part-of-speech tags} & \multicolumn{2}{l}{Named entity tags} \\ \hline
+		RB        & 3       & VBD      & 1      & DATE                & 1               \\
+		NN        & 3       & RP       & 1      & GPE                 & 1               \\ \cline{5-6} 
+		IN        & 2       & DT       & 1      &                     &                 \\
+		UH        & 1       & JJ       & 1      &                     &                 \\
+		,         & 1       & NNP      & 1      &                     &                 \\
+		PRP       & 1       & .        & 1      &                     &                 \\ \cline{1-4}
+	\end{tabular}
+	\caption{Number of each part-of-speech and named entity tag detected by spaCy in the example sentence.}
+	\label{example features}
+\end{table}
 
 For the semantic models we used word embeddings.
 
@@ -118,10 +153,130 @@ For a few selected most promising tags we tested the difference between every pa
 If the p value was less than 0.05 the difference was considered significant.
 
 \textbf{Experiment 3.} For our last experiment we wanted to find the most descriptive features for each trait using a univariate f test.
-Using only those features we tested to see if there is any difference in a model's performance.
 
 \section{Results}
-Tables and graphs (and wordclouds)
+
+\subsection{Experiment 1.}
+Accuracy and F1 results of all the models and feature combinations are shown in table \ref{table:acc-f1}.
+Summary of the model and features with the highest accuracy are shown in the table \ref{table:best}.
+
+\begin{table*}
+  \begin{center}
+  \begin{tabular}{lrrrrrrrrrr}
+    \toprule
+    model and feature  &  E acc &  N acc &  A acc &  C acc &  O acc &   E F1 &   N F1 &   A F1 &   C F1 &   O F1\\
+    \midrule
+          Bag of words &  0.536 &  0.539 &  0.507 &  0.589 &  0.594 &  0.592 &  0.455 &  0.598 &  0.570 &  0.645\\
+           PoS (s, nn) &  0.539 &  0.513 &  0.523 &  0.515 &  0.567 &  0.625 &  0.462 &  0.641 &  0.558 &  0.575\\
+           PoS (d, nn) &  0.538 &  0.529 &  0.515 &  0.507 &  0.554 &  0.614 &  0.474 &  0.639 &  0.518 &  0.518\\
+               NE (nn) &  0.538 &  0.502 &  0.505 &  0.528 &  0.549 &  0.624 &  0.518 &  0.644 &  0.541 &  0.618\\
+      PoS + NE (s, nn) &  0.555 &  0.495 &  0.491 &  0.531 &  0.606 &  0.642 &  0.461 &  0.619 &  0.544 &  0.644\\
+      PoS + NE (d, nn) &  0.521 &  0.529 &  0.523 &  0.567 &  0.570 &  0.608 &  0.474 &  0.633 &  0.588 &  0.557\\
+          PoS (s, nbs) &  0.546 &  0.497 &  0.529 &  0.539 &  0.567 &  0.593 &  0.498 &  0.643 &  0.606 &  0.611\\
+          PoS (d, nbs) &  0.551 &  0.523 &  0.512 &  0.487 &  0.560 &  0.632 &  0.533 &  0.576 &  0.540 &  0.557\\
+              NE (nbs) &  0.536 &  0.512 &  0.505 &  0.560 &  0.547 &  0.632 &  0.518 &  0.610 &  0.573 &  0.610\\
+     PoS + NE (s, nbs) &  0.565 &  0.507 &  0.500 &  0.552 &  0.560 &  0.633 &  0.464 &  0.614 &  0.576 &  0.597\\
+     PoS + NE (d, nbs) &  0.570 &  0.534 &  0.500 &  0.549 &  0.576 &  0.635 &  0.528 &  0.600 &  0.593 &  0.591\\
+         PoS (s, nbsc) &  0.555 &  0.525 &  0.504 &  0.497 &  0.565 &  0.610 &  0.551 &  0.633 &  0.535 &  0.623\\
+         PoS (d, nbsc) &  0.539 &  0.531 &  0.505 &  0.534 &  0.536 &  0.553 &  0.553 &  0.607 &  0.553 &  0.551\\
+             NE (nbsc) &  0.557 &  0.502 &  0.504 &  0.549 &  0.554 &  0.618 &  0.532 &  0.616 &  0.551 &  0.625\\
+    PoS + NE (s, nbsc) &  0.568 &  0.504 &  0.513 &  0.551 &  0.593 &  0.631 &  0.533 &  0.619 &  0.585 &  0.649\\
+    PoS + NE (d, nbsc) &  0.541 &  0.536 &  0.510 &  0.560 &  0.581 &  0.573 &  0.569 &  0.600 &  0.577 &  0.616\\
+                 XLNet &  0.604 &  0.556 &  0.542 &  0.586 &  0.636 &  0.613 &  0.468 &  0.683 &  0.576 &  0.488\\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \caption{The accuracy and F1 scores for all models and feature combinations.}
+  \label{table:acc-f1}
+\end{table*}
+
+\begin{table}[H]
+  \begin{tabular}{llrr}
+    \toprule
+    trait & model and features &     F1 & accuracy \\
+    \midrule
+    EXT &   XLNet + embeddings &  0.613 &  0.604 \\
+    NEU &   XLNet + embeddings &  0.468 &  0.556 \\
+    AGR &   XLNet + embeddings &  0.683 &  0.542 \\
+    CON &   SVM + Bag of words &  0.570 &  0.599 \\
+    OPN &   XLNet + embeddings &  0.488 &  0.636 \\
+    \bottomrule
+  \end{tabular}
+  \caption{The F1 and accuracy scores for the best models and feature combinations.}
+  \label{table:best}
+\end{table}
+
+As can be seen from the tables, all models perform similarly, but semantic models perform just slightly better on all traits.
+
+\subsection{Experiment 2.}
+
+Results of t tests can be seen in table \ref{table:ttest}.
+Only significant p values are reported.
+It is interesting to notice that Neurotic and Opennes traits are significantly different from Extrovert and Agreeable traits, but are not significantly different from each other.
+This would suggest similar syntax styles between those two groups of personality traits, but more research is needed to confirm that.
+
+\begin{table}[H]
+  \begin{tabular}{lrc}
+    \toprule
+    traits & p value & PoS tag \\
+    \midrule
+    NEU vs AGR & 0.0119 & verb \\
+    NEU vs AGR & 0.0115 & pronoun \\
+    EXT vs OPN & 0.0141 & noun \\
+    AGR vs OPN & 0.0044 & noun \\
+    EXT vs NEU & 0.0020 & punctuation \\
+    EXT vs OPN & 0.0034 & punctuation \\
+    AGR vs OPN & 0.0154 & punctuation \\
+    \bottomrule
+  \end{tabular}
+  \caption{P value for t test on part-of-speech tags which are significant.}
+  \label{table:ttest}
+\end{table}
+
+\subsection{Experiment 3.}
+
+Using word clouds we visualized the results of the experiment 3.
+Other than being amusing, the figures are quite different from each other which shows a lot of potential for good classification models.
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cEXT.png}
+  \caption{Most significant features for the EXT trait.}
+  \label{fig:figure1}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cAGR.png}
+  \caption{Most significant features for the AGR trait.}
+  \label{fig:figure2}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cOPN.png}
+  \caption{Most significant features for the OPN trait.}
+  \label{fig:figure3}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cCON.png}
+  \caption{Most significant features for the CON trait.}
+  \label{fig:figure4}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cNEU.png}
+  \caption{Most significant features for the NEU trait.}
+  \label{fig:figure5}
+\end{center}
+\end{figure}
 
 \subsection{BERT}
 
