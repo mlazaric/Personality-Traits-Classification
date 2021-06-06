@@ -58,7 +58,12 @@ Our results show that different approaches work better for different personality
 %Overview
 
 \section{Previous work}
-Something about the papers that we had to read for first chekpoint
+
+\cite{park} used five separate statistical models to predict personality traits of Facebook users, using their posts and self-reported Big5 personality traits.
+They used both boolean encodings and relative frequencies of words and phrases, as well as topic extraction, as their features, which were then reduced using univariate feature selection, and randomized principal component analysis.
+Although we use different features for our predictions, we mirror the idea of using separate models for each personality trait rather than predicting them with a single model.
+
+In contrast, \cite{pizzolli} used a single model on \cite{pennebaker} dataset with subpar results, although they used the essay dataset only for the purpose of having a baseline, before moving on to predict traits of various characters in William Shakespeare's Hamlet.
 
 \section{Dataset}
 %About dataset
@@ -117,7 +122,7 @@ For the semantic models we used word embeddings.
 %SVM, decision trees, BERT, XLNet
 
 Since the different personality traits are independent, a separate model was trained to classify each personality trait.
-To test the predictive power of syntactic features, SVMs were used, while BERT and XLNet were used as representative semantic models.
+To test the predictive power of syntactic features, SVMs were used, and XLNet was used as a representative semantic model.
 The individual models and their pipelines are further explained in the following subsections.
 
 \subsection{SVM}
@@ -125,21 +130,6 @@ The individual models and their pipelines are further explained in the following
 Support Vector Machines from scikit-learn\footnote{https://scikit-learn.org/} were trained to classify the essays for each personality trait.
 Feature selection was done by selecting a certain number of features with the highest ANOVA F-value.
 After that, the selected features were standardized by removing the mean and scaling to unit variance and used to train the SVMs.
-
-\subsection{BERT}
-
-Bidirectional Encoder Representations from Transformers, or just BERT, is a transformer based model for NLP tasks first presented in [[INSERT BERT CITATION HERE]]. 
-BERT comes pretrained on two large corpora: BooksCorpus which consists of 800 million words, and the English Wikipedia with 2.5 billion words. 
-The pretraining is done on two NLP taks: masked language modeling, where the model predicts a masked word in a sentence, and next sentence prediction. [[BERT CITATION]]
-
-BERT requires fine tuning before it is ready for usage on other NLP tasks. 
-Due to our hardware limitations, we picked a single personality trait, openness, and fine-tuned a BERT\textsubscript{BASE}$-$cased variant of BERT which was pretrained on cased input, ie. "Mark" and "mark" are different tokens. 
-The model requires fine tuning of 110 million parameters.
-
-To transform essays into the desired input representation we used BertTokenizer from the HunggingFace library [[HUGGINGFAVCE CITATION]]. 
-The tokenizer takes raw text and limits the input to 512 tokens so any essays longer than that are trimmed. 
-The dataset was split into training, validation, and testing sets with a 60/20/20 ratio, using batches of size 10 (batch size was limited due to the available GPU memory). 
-The batches were shuffled for the training set. We used Adam as the optimizer [[ADAM CITATION]] with a learning rate of $10^{-5}$ and no weight decay.
 
 \section{Experiments}
 To test our syntax and semantic models we conducted three experiments described in this section.
@@ -164,29 +154,29 @@ Summary of the model and features with the highest accuracy are shown in the tab
   \begin{center}
   \begin{tabular}{lrrrrrrrrrr}
     \toprule
-    model and feature  &  E acc &  N acc &  A acc &  C acc &  O acc &   E F1 &   N F1 &   A F1 &   C F1 &   O F1\\
+    model and feature  &  E acc         & N acc          & A acc          & C acc          &  O acc         & E F1           & N F1           & A F1           & C F1           & O F1\\
     \midrule
-          Bag of words &  0.536 &  0.539 &  0.507 &  0.589 &  0.594 &  0.592 &  0.455 &  0.598 &  0.570 &  0.645\\
-           PoS (s, nn) &  0.539 &  0.513 &  0.523 &  0.515 &  0.567 &  0.625 &  0.462 &  0.641 &  0.558 &  0.575\\
-           PoS (d, nn) &  0.538 &  0.529 &  0.515 &  0.507 &  0.554 &  0.614 &  0.474 &  0.639 &  0.518 &  0.518\\
-               NE (nn) &  0.538 &  0.502 &  0.505 &  0.528 &  0.549 &  0.624 &  0.518 &  0.644 &  0.541 &  0.618\\
-      PoS + NE (s, nn) &  0.555 &  0.495 &  0.491 &  0.531 &  0.606 &  0.642 &  0.461 &  0.619 &  0.544 &  0.644\\
-      PoS + NE (d, nn) &  0.521 &  0.529 &  0.523 &  0.567 &  0.570 &  0.608 &  0.474 &  0.633 &  0.588 &  0.557\\
-          PoS (s, nbs) &  0.546 &  0.497 &  0.529 &  0.539 &  0.567 &  0.593 &  0.498 &  0.643 &  0.606 &  0.611\\
-          PoS (d, nbs) &  0.551 &  0.523 &  0.512 &  0.487 &  0.560 &  0.632 &  0.533 &  0.576 &  0.540 &  0.557\\
-              NE (nbs) &  0.536 &  0.512 &  0.505 &  0.560 &  0.547 &  0.632 &  0.518 &  0.610 &  0.573 &  0.610\\
-     PoS + NE (s, nbs) &  0.565 &  0.507 &  0.500 &  0.552 &  0.560 &  0.633 &  0.464 &  0.614 &  0.576 &  0.597\\
-     PoS + NE (d, nbs) &  0.570 &  0.534 &  0.500 &  0.549 &  0.576 &  0.635 &  0.528 &  0.600 &  0.593 &  0.591\\
-         PoS (s, nbsc) &  0.555 &  0.525 &  0.504 &  0.497 &  0.565 &  0.610 &  0.551 &  0.633 &  0.535 &  0.623\\
-         PoS (d, nbsc) &  0.539 &  0.531 &  0.505 &  0.534 &  0.536 &  0.553 &  0.553 &  0.607 &  0.553 &  0.551\\
-             NE (nbsc) &  0.557 &  0.502 &  0.504 &  0.549 &  0.554 &  0.618 &  0.532 &  0.616 &  0.551 &  0.625\\
-    PoS + NE (s, nbsc) &  0.568 &  0.504 &  0.513 &  0.551 &  0.593 &  0.631 &  0.533 &  0.619 &  0.585 &  0.649\\
-    PoS + NE (d, nbsc) &  0.541 &  0.536 &  0.510 &  0.560 &  0.581 &  0.573 &  0.569 &  0.600 &  0.577 &  0.616\\
-                 XLNet &  0.604 &  0.556 &  0.542 &  0.586 &  0.636 &  0.613 &  0.468 &  0.683 &  0.576 &  0.488\\
+          Bag of words & 0.536          & 0.539          & 0.507          & \textbf{0.589} & 0.594          & 0.592          & 0.455          & 0.598          & 0.570          &  \textbf{0.645}\\
+           PoS (s, nn) & 0.539          & 0.513          & 0.523          & 0.515          & 0.567          & 0.625          & 0.462          & 0.641          & 0.558          &  0.575\\
+           PoS (d, nn) & 0.538          & 0.529          & 0.515          & 0.507          & 0.554          & 0.614          & 0.474          & 0.639          & 0.518          &  0.518\\
+               NE (nn) & 0.538          & 0.502          & 0.505          & 0.528          & 0.549          & 0.624          & 0.518          & \textbf{0.644} & 0.541          &  0.618\\
+      PoS + NE (s, nn) & 0.555          & 0.495          & 0.491          & 0.531          & \textbf{0.606} & 0.642          & 0.461          & 0.619          & 0.544          &  0.644\\
+      PoS + NE (d, nn) & 0.521          & 0.529          & \textbf{0.523} & 0.567          & 0.570          & 0.608          & 0.474          & 0.633          & \textbf{0.588} &  0.557\\
+          PoS (s, nbs) & 0.546          & 0.497          & 0.529          & 0.539          & 0.567          & 0.593          & 0.498          & 0.643          & \textbf{0.606} &  0.611\\
+          PoS (d, nbs) & 0.551          & 0.523          & 0.512          & 0.487          & 0.560          & 0.632          & 0.533          & 0.576          & 0.540          &  0.557\\
+              NE (nbs) & 0.536          & 0.512          & 0.505          & 0.560          & 0.547          & 0.632          & 0.518          & 0.610          & 0.573          &  0.610\\
+     PoS + NE (s, nbs) & 0.565          & 0.507          & 0.500          & 0.552          & 0.560          & \textbf{0.633} & 0.464          & 0.614          & 0.576          &  0.597\\
+     PoS + NE (d, nbs) & \textbf{0.570} & \textbf{0.534} & 0.500          & 0.549          & 0.576          & \textbf{0.635} & 0.528          & 0.600          & 0.593          &  0.591\\
+         PoS (s, nbsc) & 0.555          & 0.525          & 0.504          & 0.497          & 0.565          & 0.610          & 0.551          & 0.633          & 0.535          &  0.623\\
+         PoS (d, nbsc) & 0.539          & 0.531          & 0.505          & 0.534          & 0.536          & 0.553          & \textbf{0.553} & 0.607          & 0.553          &  0.551\\
+             NE (nbsc) & 0.557          & 0.502          & 0.504          & 0.549          & 0.554          & 0.618          & 0.532          & 0.616          & 0.551          &  0.625\\
+    PoS + NE (s, nbsc) & 0.568          & 0.504          & 0.513          & 0.551          & 0.593          & 0.631          & 0.533          & 0.619          & 0.585          &  \textbf{0.649}\\
+    PoS + NE (d, nbsc) & 0.541          & 0.536          & 0.510          & 0.560          & 0.581          & 0.573          & \textbf{0.569} & 0.600          & 0.577          &  0.616\\
+                 XLNet & \textbf{0.604} & \textbf{0.556} & \textbf{0.542} & \textbf{0.586} & \textbf{0.636} & 0.613          & 0.468          & \textbf{0.683} & 0.576          &  0.488\\
     \bottomrule
   \end{tabular}
   \end{center}
-  \caption{The accuracy and F1 scores for all models and feature combinations.}
+  \caption{The accuracy and F1 scores for all models and feature combinations, with top performers highlighted.}
   \label{table:acc-f1}
 \end{table*}
 
@@ -277,27 +267,6 @@ Other than being amusing, the figures are quite different from each other which 
   \label{fig:figure5}
 \end{center}
 \end{figure}
-
-\subsection{BERT}
-
-Even though the model's loss was steadily decreasing through the epochs, the validation loss was irregular. 
-We experimented with different training/validation/testing set ratios, and weight decay, however, the increasing trend of validation loss persisted. 
-
-\begin{table}[H]
-	\begin{tabular}{|l|c|c|c|c|c|}
-    \hline
-    Epoch & 1 & 2 & 3 & 4 & 5\\
-		\hline
-		Training loss & 0.69 & 0.66 & 0.62 & 0.51 & 0.36\\ 
-    \hline
-		Validation loss & 0.67 & 0.68 & 0.68 & 0.79 & 0.88\\ 
-    \hline
-	\end{tabular}
-	\caption{Training and validation losses during the epochs.}
-	\label{losses}
-\end{table}
-
-This does not inspire confidence into model's generalization ability.
 
 \section{Conclusion}
 Well this was fun.
