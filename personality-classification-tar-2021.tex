@@ -148,7 +148,7 @@ It uses transformers with recurrence to output the joint probability of a sequen
 To calculate the probability, it uses all permutations of word tokens in a sentence, instead of just those to the left or right of the target token.
 More info can be found in \citep{DBLP:journals/corr/abs-1906-08237}.
 
-In this paper we used pretrained XLNet for sequence classification with the XLNet tokenizer.
+In this paper we used pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
 The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed.
 The network was trained for 5 epochs with the batch size of 5.
 Adam with the learning rate of $10^{-5}$ and $10^{-2}$ regularization was used to update the parameters.
