@@ -151,7 +151,128 @@ If the p value was less than 0.05 the difference was considered significant.
 Using only those features we tested to see if there is any difference in a model's performance.
 
 \section{Results}
-Tables and graphs (and wordclouds)
+
+\subsection{Experiment 1.}
+Accuracy and F1 results of all the models and feature combinations are shown in table \ref{table:acc-f1}.
+Summary of the model and features with the highest accuracy are shown in the table \ref{table:best}.
+
+\begin{table*}
+  \begin{center}
+  \begin{tabular}{lrrrrrrrrrr}
+    \toprule
+    model and feature  &  E acc &  N acc &  A acc &  C acc &  O acc &   E F1 &   N F1 &   A F1 &   C F1 &   O F1\\
+    \midrule
+          Bag of words &  0.536 &  0.539 &  0.507 &  0.589 &  0.594 &  0.592 &  0.455 &  0.598 &  0.570 &  0.645\\
+           PoS (s, nn) &  0.539 &  0.513 &  0.523 &  0.515 &  0.567 &  0.625 &  0.462 &  0.641 &  0.558 &  0.575\\
+           PoS (d, nn) &  0.538 &  0.529 &  0.515 &  0.507 &  0.554 &  0.614 &  0.474 &  0.639 &  0.518 &  0.518\\
+               NE (nn) &  0.538 &  0.502 &  0.505 &  0.528 &  0.549 &  0.624 &  0.518 &  0.644 &  0.541 &  0.618\\
+      PoS + NE (s, nn) &  0.555 &  0.495 &  0.491 &  0.531 &  0.606 &  0.642 &  0.461 &  0.619 &  0.544 &  0.644\\
+      PoS + NE (d, nn) &  0.521 &  0.529 &  0.523 &  0.567 &  0.570 &  0.608 &  0.474 &  0.633 &  0.588 &  0.557\\
+          PoS (s, nbs) &  0.546 &  0.497 &  0.529 &  0.539 &  0.567 &  0.593 &  0.498 &  0.643 &  0.606 &  0.611\\
+          PoS (d, nbs) &  0.551 &  0.523 &  0.512 &  0.487 &  0.560 &  0.632 &  0.533 &  0.576 &  0.540 &  0.557\\
+              NE (nbs) &  0.536 &  0.512 &  0.505 &  0.560 &  0.547 &  0.632 &  0.518 &  0.610 &  0.573 &  0.610\\
+     PoS + NE (s, nbs) &  0.565 &  0.507 &  0.500 &  0.552 &  0.560 &  0.633 &  0.464 &  0.614 &  0.576 &  0.597\\
+     PoS + NE (d, nbs) &  0.570 &  0.534 &  0.500 &  0.549 &  0.576 &  0.635 &  0.528 &  0.600 &  0.593 &  0.591\\
+         PoS (s, nbsc) &  0.555 &  0.525 &  0.504 &  0.497 &  0.565 &  0.610 &  0.551 &  0.633 &  0.535 &  0.623\\
+         PoS (d, nbsc) &  0.539 &  0.531 &  0.505 &  0.534 &  0.536 &  0.553 &  0.553 &  0.607 &  0.553 &  0.551\\
+             NE (nbsc) &  0.557 &  0.502 &  0.504 &  0.549 &  0.554 &  0.618 &  0.532 &  0.616 &  0.551 &  0.625\\
+    PoS + NE (s, nbsc) &  0.568 &  0.504 &  0.513 &  0.551 &  0.593 &  0.631 &  0.533 &  0.619 &  0.585 &  0.649\\
+    PoS + NE (d, nbsc) &  0.541 &  0.536 &  0.510 &  0.560 &  0.581 &  0.573 &  0.569 &  0.600 &  0.577 &  0.616\\
+                 XLNet &  0.604 &  0.556 &  0.542 &  0.586 &  0.636 &  0.613 &  0.468 &  0.683 &  0.576 &  0.488\\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \caption{The accuracy and F1 scores for all models and feature combinations.}
+  \label{table:acc-f1}
+\end{table*}
+
+\begin{table}[H]
+  \begin{tabular}{llrr}
+    \toprule
+    trait & model and features &     F1 & accuracy \\
+    \midrule
+    EXT &   XLNet + embeddings &  0.613 &  0.604 \\
+    NEU &   XLNet + embeddings &  0.468 &  0.556 \\
+    AGR &   XLNet + embeddings &  0.683 &  0.542 \\
+    CON &   SVM + Bag of words &  0.570 &  0.599 \\
+    OPN &   XLNet + embeddings &  0.488 &  0.636 \\
+    \bottomrule
+  \end{tabular}
+  \caption{The F1 and accuracy scores for the best models and feature combinations.}
+  \label{table:best}
+\end{table}
+
+As can be seen from the tables, all models perform similarly, but semantic models perform just slightly better on all traits.
+
+\subsection{Experiment 2.}
+
+Results of t tests can be seen in table \ref{table:ttest}.
+Only significant p values are reported.
+It is interesting to notice that Neurotic and Opennes traits are significantly different from Extrovert and Agreeable traits, but are not significantly different from each other.
+This would suggest similar syntax styles between those two groups of personality traits, but more research is needed to confirm that.
+
+\begin{table}[H]
+  \begin{tabular}{lrc}
+    \toprule
+    traits & p value & PoS tag \\
+    \midrule
+    NEU vs AGR & 0.0119 & verb \\
+    NEU vs AGR & 0.0115 & pronoun \\
+    EXT vs OPN & 0.0141 & noun \\
+    AGR vs OPN & 0.0044 & noun \\
+    EXT vs NEU & 0.0020 & punctuation \\
+    EXT vs OPN & 0.0034 & punctuation \\
+    AGR vs OPN & 0.0154 & punctuation \\
+    \bottomrule
+  \end{tabular}
+  \caption{P value for t test on part-of-speech tags which are significant.}
+  \label{table:ttest}
+\end{table}
+
+\subsection{Experiment 3.}
+
+Using word clouds we visualized the results of the experiment 3.
+Other than being amusing, the figures are quite different from each other which shows a lot of potential for good classification models.
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cEXT.png}
+  \caption{Most significant features for the EXT trait.}
+  \label{fig:figure1}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cAGR.png}
+  \caption{Most significant features for the AGR trait.}
+  \label{fig:figure2}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cOPN.png}
+  \caption{Most significant features for the OPN trait.}
+  \label{fig:figure3}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cCON.png}
+  \caption{Most significant features for the CON trait.}
+  \label{fig:figure4}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=\columnwidth]{figures/cNEU.png}
+  \caption{Most significant features for the NEU trait.}
+  \label{fig:figure5}
+\end{center}
+\end{figure}
 
 \section{Conclusion}
 Well this was fun.
