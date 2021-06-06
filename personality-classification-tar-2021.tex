@@ -76,13 +76,13 @@ The dataset contains 2467  essays with a mostly balanced number of positive and 
 \begin{table}[H]
 	\centering
 	\begin{tabular}{lrr}
-		\hline
-		Personality trait & Negative & Positive \\ \hline
+		\toprule
+		Personality trait & Negative & Positive \\ \midrule
 		Extraversion                                  & 1191 (48.28\%)                         & 1276 (51.72\%)                         \\
 		Neuroticism                                  & 1234 (50.02\%)                         & 1233 (49.98\%)                         \\
 		Agreeableness                                  & 1157 (46.90\%)                         & 1310 (53.10\%)                         \\
 		Conscientiousness                                  & 1214 (49.21\%)                         & 1253 (50.79\%)                         \\
-		Openness                                  & 1196 (48.48\%)                         & 1271 (51.52\%)                         \\ \hline
+		Openness                                  & 1196 (48.48\%)                         & 1271 (51.52\%)                         \\ \bottomrule
 	\end{tabular}
 	\caption{The number of positive and negative examples for each personality trait.}
 	\label{positive negative examples}
@@ -103,8 +103,8 @@ SpaCy's abbreviations for individual tags are used to preserve space.
 \begin{table}[H]
 	\centering
 	\begin{tabular}{llllll}
-		\hline
-		\multicolumn{4}{l}{Part-of-speech tags} & \multicolumn{2}{l}{Named entity tags} \\ \hline
+		\toprule
+		\multicolumn{4}{l}{Part-of-speech tags} & \multicolumn{2}{l}{Named entity tags} \\ \midrule
 		RB        & 3       & VBD      & 1      & DATE                & 1               \\
 		NN        & 3       & RP       & 1      & GPE                 & 1               \\ \cline{5-6} 
 		IN        & 2       & DT       & 1      &                     &                 \\
@@ -166,7 +166,7 @@ Summary of the model and features with the highest accuracy are shown in the tab
   \begin{center}
   \begin{tabular}{lrrrrrrrrrr}
     \toprule
-    model and feature  &  E acc         & N acc          & A acc          & C acc          &  O acc         & E F1           & N F1           & A F1           & C F1           & O F1\\
+    Model and features  &  E acc         & N acc          & A acc          & C acc          &  O acc         & E F1           & N F1           & A F1           & C F1           & O F1\\
     \midrule
           Bag of words & 0.536          & 0.539          & 0.507          & \textbf{0.589} & 0.594          & 0.592          & 0.455          & 0.598          & 0.570          &  \textbf{0.645}\\
            PoS (s, nn) & 0.539          & 0.513          & 0.523          & 0.515          & 0.567          & 0.625          & 0.462          & 0.641          & 0.558          &  0.575\\
@@ -193,9 +193,10 @@ Summary of the model and features with the highest accuracy are shown in the tab
 \end{table*}
 
 \begin{table}[H]
+	\centering
   \begin{tabular}{llrr}
     \toprule
-    trait & model and features &     F1 & accuracy \\
+    Trait & Model and features &     F1 & Accuracy \\
     \midrule
     EXT &   XLNet + embeddings &  0.613 &  0.604 \\
     NEU &   XLNet + embeddings &  0.468 &  0.556 \\
@@ -218,9 +219,10 @@ It is interesting to notice that Neurotic and Openness traits are significantly 
 This would suggest similar syntax styles between those two groups of personality traits, but more research is needed to confirm that.
 
 \begin{table}[H]
+	\centering
   \begin{tabular}{lrc}
     \toprule
-    traits & p value & PoS tag \\
+    Traits & p value & PoS tag \\
     \midrule
     NEU vs AGR & 0.0119 & verb \\
     NEU vs AGR & 0.0115 & pronoun \\
