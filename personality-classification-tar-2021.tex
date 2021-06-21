@@ -38,10 +38,10 @@ Unska 3, 10000 Zagreb, Croatia\\
 \section{Introduction}
 
 Every text contains a remarkable amount of information about the author.
-While that information might not be apparent to people, natural language processing has shown itself very adept to using that information to classify texts and their authors' into certain categories.
+While that information might not be apparent to people, natural language processing has shown itself very adept to using that information to classify texts and their authors into certain categories.
 
 An example of such a task is classifying the personality of the author based on their essay.
-Since a personality is hard to define, it is usually decomposed into several personality traits which are usually binary.
+Since a personality is hard-to-define, it is usually decomposed into several personality traits which are usually binary.
 The big five personality model is a popular personality trait model which will be used in this paper.
 It uses the following five personality traits: extraversion, agreeableness, openness, conscientiousness and neuroticism.
 
@@ -57,7 +57,7 @@ Our results show that semantic models tend to perform better than syntactic mode
 %Results are showing..
 %Overview
 
-\section{Previous work}
+\section{Previous Work}
 
 \cite{park} used five separate statistical models to predict personality traits of Facebook users, using their posts and self-reported Big5 personality traits.
 They used both boolean encodings and relative frequencies of words and phrases, as well as topic extraction, as their features, which were then reduced using univariate feature selection, and randomized principal component analysis.
@@ -75,6 +75,7 @@ The dataset contains 2467  essays with a mostly balanced number of positive and 
 
 \begin{table}[H]
 	\centering
+	\caption{The number of positive and negative examples for each personality trait.}
 	\begin{tabular}{lrr}
 		\toprule
 		Personality trait & Negative & Positive \\ \midrule
@@ -84,7 +85,6 @@ The dataset contains 2467  essays with a mostly balanced number of positive and 
 		Conscientiousness                                  & 1214 (49.21\%)                         & 1253 (50.79\%)                         \\
 		Openness                                  & 1196 (48.48\%)                         & 1271 (51.52\%)                         \\ \bottomrule
 	\end{tabular}
-	\caption{The number of positive and negative examples for each personality trait.}
 	\label{positive negative examples}
 \end{table}
 
@@ -102,6 +102,7 @@ SpaCy's abbreviations for individual tags are used to preserve space.
 
 \begin{table}[H]
 	\centering
+	\caption{Number of each part-of-speech and named entity tag detected by spaCy in the example sentence.}
 	\begin{tabular}{llllll}
 		\toprule
 		\multicolumn{4}{l}{Part-of-speech tags} & \multicolumn{2}{l}{Named entity tags} \\ \midrule
@@ -112,7 +113,6 @@ SpaCy's abbreviations for individual tags are used to preserve space.
 		,         & 1       & NNP      & 1      &                     &                 \\
 		PRP       & 1       & .        & 1      &                     &                 \\ \cline{1-4}
 	\end{tabular}
-	\caption{Number of each part-of-speech and named entity tag detected by spaCy in the example sentence.}
 	\label{example features}
 \end{table}
 
@@ -129,7 +129,7 @@ The individual models and their pipelines are further explained in the following
 
 Support Vector Machines from scikit-learn\footnote{https://scikit-learn.org/} were trained to classify the essays for each personality trait.
 Feature selection was done by selecting a certain number of features with the highest ANOVA F-value.
-After that, the selected features were standardized by removing the mean and scaling to unit variance and used to train the SVMs.
+After that, the selected features were standardized by subtracting the mean and scaling to unit variance and used to train the SVMs.
 
 \subsection{XLNet}
 
@@ -137,8 +137,8 @@ XLNet is an auto-regressive language model introduced in \citep{DBLP:journals/co
 It uses transformers with recurrence to output the joint probability of a sequence of tokens.
 To calculate the probability, it uses all permutations of word tokens in a sentence, instead of just those to the left or right of the target token.
 
-In this paper we used pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
-The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed.
+In this paper we used a pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
+The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed (about 70\% of essays end up being trimmed).
 The network was trained for 5 epochs with the batch size of 5.
 Adam with the learning rate of $10^{-5}$ and $10^{-2}$ regularization was used to update the parameters.
 
@@ -160,8 +160,10 @@ If the p value was less than 0.05 the difference was considered significant.
 \subsection{Experiment 1.}
 Accuracy and F1 results of all the models and feature combinations are shown in table \ref{table:acc-f1}.
 Summary of the model and features with the highest accuracy are shown in the table \ref{table:best}.
+In the tables we use the following abbreviations: Agreeableness==A, Conscientiousness==C, Extraversion==E, Neuroticism==N, Openness=O.
 
 \begin{table*}
+  \caption{The accuracy and F1 scores for all models and feature combinations (s: simple, d: detailed, nn: non normalized, nbs: normalized by sum, nbsc: normalized by sentence count).}
   \begin{center}
   \begin{tabular}{lrrrrrrrrrr}
     \toprule
@@ -187,24 +189,23 @@ Summary of the model and features with the highest accuracy are shown in the tab
     \bottomrule
   \end{tabular}
   \end{center}
-  \caption{The accuracy and F1 scores for all models and feature combinations (s: simple, d: detailed, nn: non normalized, nbs: normalized by sum, nbsc: normalized by sentence count).}
   \label{table:acc-f1}
 \end{table*}
 
 \begin{table}[H]
-	\centering
+  \centering
+  \caption{The F1 and accuracy scores for the best models and feature combinations.}
   \begin{tabular}{llrr}
     \toprule
     Trait & Model and features &     F1 & Accuracy \\
     \midrule
-    EXT &   XLNet + embeddings &  0.613 &  0.604 \\
-    NEU &   XLNet + embeddings &  0.468 &  0.556 \\
-    AGR &   XLNet + embeddings &  0.683 &  0.542 \\
-    CON &   SVM + Bag of words &  0.570 &  0.599 \\
-    OPN &   XLNet + embeddings &  0.488 &  0.636 \\
+    E &   XLNet + embeddings &  0.613 &  0.604 \\
+    N &   XLNet + embeddings &  0.468 &  0.556 \\
+    A &   XLNet + embeddings &  0.683 &  0.542 \\
+    C &   SVM + Bag of words &  0.570 &  0.589 \\
+    O &   XLNet + embeddings &  0.488 &  0.636 \\
     \bottomrule
   \end{tabular}
-  \caption{The F1 and accuracy scores for the best models and feature combinations.}
   \label{table:best}
 \end{table}
 
@@ -218,21 +219,21 @@ It is interesting to notice that Neurotic and Openness traits are significantly 
 This would suggest similar syntax styles between those two groups of personality traits, but more research is needed to confirm that.
 
 \begin{table}[H]
-	\centering
+  \centering
+  \caption{P value for t test on part-of-speech tags which are significant.}
   \begin{tabular}{lrc}
     \toprule
     Traits & p value & PoS tag \\
     \midrule
-    NEU vs AGR & 0.0119 & verb \\
-    NEU vs AGR & 0.0115 & pronoun \\
-    EXT vs OPN & 0.0141 & noun \\
-    AGR vs OPN & 0.0044 & noun \\
-    EXT vs NEU & 0.0020 & punctuation \\
-    EXT vs OPN & 0.0034 & punctuation \\
-    AGR vs OPN & 0.0154 & punctuation \\
+    N vs A & 0.0119 & verb \\
+    N vs A & 0.0115 & pronoun \\
+    E vs O & 0.0141 & noun \\
+    A vs O & 0.0044 & noun \\
+    E vs N & 0.0020 & punctuation \\
+    E vs O & 0.0034 & punctuation \\
+    A vs O & 0.0154 & punctuation \\
     \bottomrule
   \end{tabular}
-  \caption{P value for t test on part-of-speech tags which are significant.}
   \label{table:ttest}
 \end{table}
 
@@ -244,7 +245,7 @@ Other than being amusing, the figures are quite different from each other which 
 \begin{figure}
 \begin{center}
   \includegraphics[width=\columnwidth]{figures/cEXT.png}
-  \caption{Most significant features for the EXT trait.}
+  \caption{Most significant features for the Extraversion trait.}
   \label{fig:figure1}
 \end{center}
 \end{figure}
@@ -252,7 +253,7 @@ Other than being amusing, the figures are quite different from each other which 
 \begin{figure}
 \begin{center}
   \includegraphics[width=\columnwidth]{figures/cAGR.png}
-  \caption{Most significant features for the AGR trait.}
+  \caption{Most significant features for the Agreeableness trait.}
   \label{fig:figure2}
 \end{center}
 \end{figure}
@@ -260,7 +261,7 @@ Other than being amusing, the figures are quite different from each other which 
 \begin{figure}
 \begin{center}
   \includegraphics[width=\columnwidth]{figures/cOPN.png}
-  \caption{Most significant features for the OPN trait.}
+  \caption{Most significant features for the Openness trait.}
   \label{fig:figure3}
 \end{center}
 \end{figure}
@@ -268,7 +269,7 @@ Other than being amusing, the figures are quite different from each other which 
 \begin{figure}
 \begin{center}
   \includegraphics[width=\columnwidth]{figures/cCON.png}
-  \caption{Most significant features for the CON trait.}
+  \caption{Most significant features for the Conscientiousness trait.}
   \label{fig:figure4}
 \end{center}
 \end{figure}
@@ -276,7 +277,7 @@ Other than being amusing, the figures are quite different from each other which 
 \begin{figure}
 \begin{center}
   \includegraphics[width=\columnwidth]{figures/cNEU.png}
-  \caption{Most significant features for the NEU trait.}
+  \caption{Most significant features for the Neurotic trait.}
   \label{fig:figure5}
 \end{center}
 \end{figure}
@@ -284,7 +285,7 @@ Other than being amusing, the figures are quite different from each other which 
 \section{Conclusion}
 In this paper, we compared only syntax and only semantic models to see if one has an edge over the other.
 While there is certainly some information hiding in the syntax, semantics still seem to be the dominating factor.
-By looking at the most important features for each personality, we can clearly see the differences between them, and some and not that surprising.
+By looking at the most important features for each personality, we can clearly see the differences between them, and some are not that surprising.
 This promises a bright future for personality trait classification, and it seems that both syntax and semantics will be needed to create a powerful model.
 
 \bibliographystyle{tar2021}
