@@ -13,6 +13,7 @@
 \usepackage{amssymb}
 \usepackage{float}
 
+
 \title{Syntax vs Semantics: What tells more about your personality?}
 
 \name{Marko Lazarić, Laura Torić, Roman Yatsukha}
@@ -59,17 +60,17 @@ Our results show that semantic models tend to perform better than syntactic mode
 
 \section{Previous Work}
 
-\cite{park} used five separate statistical models to predict personality traits of Facebook users, using their posts and self-reported Big5 personality traits.
+\citep{park} used five separate statistical models to predict personality traits of Facebook users, using their posts and self-reported Big5 personality traits.
 They used both boolean encodings and relative frequencies of words and phrases, as well as topic extraction, as their features, which were then reduced using univariate feature selection, and randomized principal component analysis.
 Although we use different features for our predictions, we mirror the idea of using separate models for each personality trait rather than predicting them with a single model.
 
-In contrast, \cite{pizzolli-strapparava-2019-personality} used a single model on \cite{pennebaker} dataset with subpar results, although they used the essay dataset only for the purpose of having a baseline, before moving on to predict traits of various characters in William Shakespeare's Hamlet.
+In contrast, \citep{pizzolli-strapparava-2019-personality} used a single model on \citep{pennebaker} dataset with subpar results, although they used the essay dataset only for the purpose of having a baseline, before moving on to predict traits of various characters in William Shakespeare's Hamlet.
 
 \section{Dataset}
 %About dataset
 %POS, NE, embeddings, bag of words
 
-The dataset used for this paper is from \cite{pennebaker}, a collection of student essays.
+The dataset used for this paper is from \citep{pennebaker}, a collection of student essays.
 The students' personality traits were assessed using the big five inventory (BFI) self-report questionnaire.
 The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
 
