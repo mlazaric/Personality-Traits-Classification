@@ -38,7 +38,7 @@ Unska 3, 10000 Zagreb, Croatia\\
 \section{Introduction}
 
 Every text contains a remarkable amount of information about the author.
-While that information might not be apparent to people, natural language processing has shown itself very adept to using that information to classify texts and their authors into certain categories.
+While that information might not be apparent to people, natural language processing has shown itself very adept at using that information to classify texts and their authors into certain categories.
 
 An example of such a task is classifying the personality of the author based on their essay.
 Since a personality is hard-to-define, it is usually decomposed into several personality traits which are usually binary.
@@ -116,7 +116,7 @@ SpaCy's abbreviations for individual tags are used to preserve space.
 	\label{example features}
 \end{table}
 
-For the semantic models we used word embeddings.
+For the semantic models, we used word embeddings.
 
 \section{Models}
 %SVM, decision trees, BERT, XLNet
@@ -137,33 +137,33 @@ XLNet is an auto-regressive language model introduced in \citep{DBLP:journals/co
 It uses transformers with recurrence to output the joint probability of a sequence of tokens.
 To calculate the probability, it uses all permutations of word tokens in a sentence, instead of just those to the left or right of the target token.
 
-In this paper we used a pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
-The tokenizer takes raw text and limits the input to 500 tokens so any essays longer than that are trimmed (about 70\% of essays end up being trimmed).
-The network was trained for 5 epochs with the batch size of 5.
+In this paper, we used a pretrained XLNet for sequence classification with the XLNet tokenizer from the transformers\footnote{https://huggingface.co/transformers/} package.
+The tokenizer takes the raw text and limits the input to 500 tokens so any essays longer than that are trimmed (about 70\% of essays end up being trimmed).
+The network was trained for 5 epochs with a batch size of 5.
 Adam with the learning rate of $10^{-5}$ and $10^{-2}$ regularization was used to update the parameters.
 
 \section{Experiments}
 To test our syntax and semantic models we conducted three experiments described in this section.
 
 \textbf{Experiment 1.} To test the performance of different models and features we decided to compare F1 and accuracy scores measured on the test set.
-For the syntax models we used SVM with all possible combinations of part-of-speech and named entity tags and tested all of them.
-For the semantic models we used XLNet and SVM with bag-of-words features.
+For the syntax models, we used SVM with all possible combinations of part-of-speech and named entity tags and tested all of them.
+For the semantic models, we used XLNet and SVM with bag-of-words features.
 
-\textbf{Experiment 2.}  In order to test if some personality traits had different distributions of part-of-speech or named entity tags than others, we used a t-test, or more accurately, Welch’s t-test.
+\textbf{Experiment 2.}  In order to test if some personality traits had different distributions of part-of-speech or named entity tags than others, we used a t-test, or more accurately, Welch's t-test.
 For a few selected most promising tags we tested the difference between every pair of traits and reported p values.
 If the p value was less than 0.05 the difference was considered significant.
 
-\textbf{Experiment 3.} For our last experiment we wanted to find the most descriptive features for each trait using a univariate f test.
+\textbf{Experiment 3.} For our last experiment, we wanted to find the most descriptive features for each trait using a univariate f test.
 
 \section{Results}
 
 \subsection{Experiment 1.}
-Accuracy and F1 results of all the models and feature combinations are shown in table \ref{table:acc-f1}.
-Summary of the model and features with the highest accuracy are shown in the table \ref{table:best}.
+The accuracy and F1 results of all the models and feature combinations are shown in table \ref{table:acc-f1}.
+Summary of the model and features with the highest accuracy are shown in table \ref{table:best}.
 In the tables we use the following abbreviations: Agreeableness==A, Conscientiousness==C, Extraversion==E, Neuroticism==N, Openness=O.
 
 \begin{table*}
-  \caption{The accuracy and F1 scores for all models and feature combinations (s: simple, d: detailed, nn: non normalized, nbs: normalized by sum, nbsc: normalized by sentence count).}
+  \caption{The accuracy and F1 scores for all models and feature combinations (s: simple, d: detailed, nn: non-normalized, nbs: normalized by sum, nbsc: normalized by sentence count).}
   \begin{center}
   \begin{tabular}{lrrrrrrrrrr}
     \toprule
@@ -239,7 +239,7 @@ This would suggest similar syntax styles between those two groups of personality
 
 \subsection{Experiment 3.}
 
-Using word clouds we visualized the results of the experiment 3.
+Using word clouds we visualized the results of experiment 3.
 Other than being amusing, the figures are quite different from each other which shows a lot of potential for good classification models.
 
 \begin{figure}
@@ -284,7 +284,7 @@ Other than being amusing, the figures are quite different from each other which 
 
 \section{Conclusion}
 In this paper, we compared only syntax and only semantic models to see if one has an edge over the other.
-While there is certainly some information hiding in the syntax, semantics still seem to be the dominating factor.
+While there is certainly some information hiding in the syntax, semantics still seems to be the dominating factor.
 By looking at the most important features for each personality, we can clearly see the differences between them, and some are not that surprising.
 This promises a bright future for personality trait classification, and it seems that both syntax and semantics will be needed to create a powerful model.
 
