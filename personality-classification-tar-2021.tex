@@ -70,7 +70,7 @@ In contrast, \citep{pizzolli-strapparava-2019-personality} used a single model o
 %About dataset
 %POS, NE, embeddings, bag of words
 
-The dataset used for this paper is from \citep{pennebaker}, a collection of student essays.
+The dataset used for this paper is a collection of student essays from \citep{pennebaker}.
 The students' personality traits were assessed using the big five inventory (BFI) self-report questionnaire developed by \citep{john1991big}.
 The dataset contains 2467  essays with a mostly balanced number of positive and negative examples for each class which is shown in table \ref{positive negative examples}.
 
@@ -93,7 +93,7 @@ Our goal is to correctly classify all of the big five personality traits based o
 
 \section{Features}
 
-The features extracted from the essays were bag-of-words features and the number of occurrences each part-of-speech and named entity tag in the essay.
+The features extracted from the essays were bag-of-words features and the number of occurrences of each part-of-speech and named entity tag in the essay.
 SpaCy\footnote{https://spacy.io} was used for lemmatization, part-of-speech tagging and named entity recognition.
 
 To reduce the effect of the length of the essay on the features, alternative features were tried where each number was normalized by the sum of the part-of-speech or named entity tags to get the percentage of each tag or normalized by the number of sentences to get the mean number of each part-of-speech or named entity tag per sentence.
@@ -117,7 +117,7 @@ SpaCy's abbreviations for individual tags are used to preserve space.
 	\label{example features}
 \end{table}
 
-For the semantic models, we used word embeddings.
+For the semantic models, we used XLNet and its pretrained embeddings.
 
 \section{Models}
 %SVM, decision trees, BERT, XLNet
